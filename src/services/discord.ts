@@ -1,7 +1,8 @@
 import Discord, { MessageEmbed } from 'discord.js'
 
 export default class DiscordBot {
-  private client
+  private client: Discord.Client
+  private channelId: string
   constructor() {
     this.client = new Discord.Client()
   }
@@ -16,16 +17,18 @@ export default class DiscordBot {
 
     this.client.on('message', async (msg) => {
       if (msg.content.indexOf('!setup') === 0) {
-        const [, channelName] = msg.content.split(' ')
-        const channelId = channelName.substring(
-          channelName.indexOf('#') + 1,
-          channelName.indexOf('>')
-        )
-        console.log('the id is', channelId)
-        const channel = await this.client.channels.fetch(channelId)
-
-        channel.send('hi')
-        console.log(channel)
+        if (!this.channelId) {
+          const [, channelName] = msg.content.split(' ')
+          const channelId = channelName.substring(
+            channelName.indexOf('#') + 1,
+            channelName.indexOf('>')
+          )
+          console.log('the id is', channelId)
+          await this.client.channels.fetch(channelId)
+          this.channelId = channelId
+        } else {
+          msg.reply('We have already initialized a channel')
+        }
       }
     })
 
