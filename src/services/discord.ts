@@ -1,6 +1,6 @@
 import Discord, { MessageEmbed } from 'discord.js'
 
-export default class DiscordBot {
+export class DiscordBot {
   private client: Discord.Client
   private channelId: string
   constructor() {
@@ -34,4 +34,13 @@ export default class DiscordBot {
 
     this.client.login(process.env.TOKEN)
   }
+
+  async sendMessage(message: string) {
+    const channel = await this.client.channels.fetch('718880844944506900')
+    // channel.send('hello!')
+  }
 }
+
+const discordInstance = new DiscordBot()
+
+export default discordInstance
